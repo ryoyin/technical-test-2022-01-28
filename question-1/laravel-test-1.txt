@@ -1,0 +1,8 @@
+line 15: should be extends
+line 18: missing double quote
+line 26&35: should be foreach and exclude paginate
+line 45: should be $posts->links()
+line 50: should be =>
+line 56: named route with prefix should use blogs.create instead of blogs/create
+line 57: translate helper function should be trans
+line 60: should be endsection
