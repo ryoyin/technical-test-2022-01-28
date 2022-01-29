@@ -86,24 +86,57 @@
             '<td colspan="4" class="data-table-footer">' +
                 '<ul>' +
                     '<li>prev_page</li>' +
-                    'pagination' +
+                    'page_links' +
                     '<li>next_page</li>' +
                 '</ul>' +
             '</td>' +
         '</tr>'
 
+        function generatePagination(res) {
+            // pagination
+            var current_page = res.current_page;
+            var last_page = res.last_page;
+
+            // determine prev_page html code
+            var prev_page = current_page - 1;
+            prev_page = prev_page == 0 ? 1 : prev_page;
+            var prev_page = prev_page == current_page ? '<' : '<a href="#" onclick="fetchContact(' + prev_page + ')"><</a>'
+
+            // determine next_page html code
+            var next_page = current_page + 1;
+            next_page = next_page > last_page ? last_page : next_page;
+            var next_page = next_page == current_page ? '>' : '<a href="#" onclick="fetchContact(' + next_page + ')">></a>'
+
+            // generate page links
+            var page_links = '';
+            for(var i=1; i<=last_page; i++) {
+                var link = i == current_page ? i : '<a href="#" onclick="fetchContact(' + i + ')">' + i + '</a>';
+                page_links += '<li>' + link + '</li>';
+            }
+
+            // generate prev and next page html code
+            var tmpPaginate = dataTablePaginateTemplate;
+            tmpPaginate = tmpPaginate.replace('prev_page', prev_page);
+            tmpPaginate = tmpPaginate.replace('next_page', next_page);
+            tmpPaginate = tmpPaginate.replace('page_links', page_links);
+
+            return tmpPaginate;
+        }
+
         // retrieve contact records via api
         function fetchContact(page) {
-            $("#overlay").show();
+            $("#overlay").show(); // display loading message
 
-            $(".contact-data").remove();
-            $(".contact-pagination").remove();
+            $(".contact-data").remove(); // remove table data
+            $(".contact-pagination").remove(); // remove table pagination
 
+            // get request for contacts data
             $.ajax( "{{ url('/api/contacts') }}?page=" + page )
                 .done(function(res) {
 
                     console.log(res);
 
+                    // generate contacts and append to the table
                     res.data.forEach(contact => {
                         var tmpData = dataTableDataTemplate;
                         tmpData = tmpData.replace('first_name', contact.first_name);
@@ -113,24 +146,11 @@
                         $('.data-table').append(tmpData);
                     });
 
-                    var current_page = res.current_page;
-                    var last_page = res.last_page;
-                    var prev_page = current_page - 1;
-                    prev_page = prev_page == 0 ? 1 : prev_page;
-                    var next_page = current_page + 1;
-                    next_page = next_page > last_page ? last_page : next_page;
+                    $('.data-table').append(generatePagination(res)); // append generated pagination code to the table
 
-                    var prev_page = prev_page == current_page ? '<' : '<a href="#" onclick="fetchContact(' + prev_page + ')"><</a>'
-                    var next_page = next_page == current_page ? '>' : '<a href="#" onclick="fetchContact(' + next_page + ')">></a>'
-
-                    var tmpPaginate = dataTablePaginateTemplate;
-                    tmpPaginate = tmpPaginate.replace('prev_page', prev_page);
-                    tmpPaginate = tmpPaginate.replace('next_page', next_page);
-
-                    $('.data-table').append(tmpPaginate);
-
+                    // remove overlay
                     $("#overlay")
-                        .delay(1000)
+                        .delay(500)
                         .queue(function (next) {
                             $(this).css('display', 'none');
                             next();
