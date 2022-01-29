@@ -149,20 +149,24 @@
             $.ajax( "{{ url('/api/contacts') }}" + query )
                 .done(function(res) {
 
-                    console.log(res);
+                    if (res.data.length == 0) { // no record found
+                        $('.data-table').remove();
+                        $('.main').append('<div>No record found!</div>');
+                    } else {
+                        // generate contacts and append to the table
+                        res.data.forEach(contact => {
+                            var tmpData = dataTableDataTemplate;
+                            tmpData = tmpData.replace('first_name', contact.first_name);
+                            tmpData = tmpData.replace('last_name', contact.last_name);
+                            tmpData = tmpData.replace('email', contact.email);
+                            tmpData = tmpData.replace('telephone', contact.telephone);
+                            $('.data-table').append(tmpData);
+                        });
 
-                    // generate contacts and append to the table
-                    res.data.forEach(contact => {
-                        var tmpData = dataTableDataTemplate;
-                        tmpData = tmpData.replace('first_name', contact.first_name);
-                        tmpData = tmpData.replace('last_name', contact.last_name);
-                        tmpData = tmpData.replace('email', contact.email);
-                        tmpData = tmpData.replace('telephone', contact.telephone);
-                        $('.data-table').append(tmpData);
-                    });
+                        if (res.last_page > 1)
+                            $('.data-table').append(generatePagination(res)); // append generated pagination code to the table
 
-                    if (res.last_page > 1)
-                        $('.data-table').append(generatePagination(res)); // append generated pagination code to the table
+                    }
 
                     // remove overlay
                     $("#overlay")
