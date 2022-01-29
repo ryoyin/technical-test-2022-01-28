@@ -15,22 +15,33 @@
 
     <div class="page-header">Create a new contact</div>
 
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
     <form method="POST" action="{{ route('contacts.store') }}">
+        @csrf
         <div>
             <div class="label"><label>First Name</label>:</div>
-            <input type="text" id="first_name" class="form-field" name="first_name" placeholder="e.g. Paul" required>
+            <input type="text" id="first_name" class="form-field" name="first_name" placeholder="e.g. Paul" value="{{ request()->old('first_name') }}" required>
         </div>
         <div>
             <div class="label"><label>Last Name</label>:</div>
-            <input type="text" id="last_name" class="form-field" name="last_name" placeholder="e.g. McCartney" required>
+            <input type="text" id="last_name" class="form-field" name="last_name" placeholder="e.g. McCartney" value="{{ request()->old('last_name') }}" required>
         </div>
         <div>
             <div class="label"><label>Email</label>:</div>
-            <input type="email" id="email" class="form-field" name="email" placeholder="e.g. paul.mccartney@gmail.com" required>
+            <input type="email" id="email" class="form-field" name="email" placeholder="e.g. paul.mccartney@gmail.com" value="{{ request()->old('email') }}" required>
         </div>
         <div>
             <div class="label"><label>Telephone</label>:</div>
-            <input type="text" id="telephone" class="form-field" name="telephone" placeholder="e.g. 077172395872" required>
+            <input type="text" id="telephone" class="form-field" name="telephone" placeholder="e.g. 077172395872" value="{{ request()->old('telephone') }}" required>
         </div>
         <div>
             <input type="submit">
@@ -72,8 +83,6 @@
                 alert(error_message);
                 return false;
             }
-
-            return false;
         });
     </script>
 @endsection

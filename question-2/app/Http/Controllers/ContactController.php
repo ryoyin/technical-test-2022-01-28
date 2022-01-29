@@ -47,7 +47,21 @@ class ContactController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validatedData = $request->validate([
+            'first_name' => 'required|min:2|max:30',
+            'last_name' => 'required|min:2|max:30',
+            'email' => 'required|unique:App\Model\Contact,email|min:7|max:100',
+            'telephone' => 'required|unique:App\Model\Contact,telephone|digits:11',
+        ]);
+
+        $contact = New Contact;
+        $contact->first_name = trim($request->first_name);
+        $contact->last_name = trim($request->last_name);
+        $contact->email = trim($request->email);
+        $contact->telephone = trim($request->telephone);
+        $contact->save();
+
+        return redirect()->route('contacts.index')->with('success', $request->first_name.' added to contact.');
     }
 
     /**

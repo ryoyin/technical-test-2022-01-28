@@ -45,6 +45,14 @@
 
     <div class="page-header">Index Page - <a class="action" href="{{ route('contacts.create') }}">create a contact</a></div>
 
+    @if (\Session::has('success'))
+        <div class="alert alert-success">
+            <ul>
+                <li>{!! \Session::get('success') !!}</li>
+            </ul>
+        </div>
+    @endif
+
     <table class="data-table">
         <tr>
             <th>First Name</th>
