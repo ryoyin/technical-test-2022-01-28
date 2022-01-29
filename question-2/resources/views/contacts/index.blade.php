@@ -14,6 +14,10 @@
             text-align: left;
         }
 
+        .data-table td {
+            padding-right: 18px;
+        }
+
         .data-table-footer {
             /* text-align: right; */
         }
@@ -39,7 +43,7 @@
         }
     </style>
 
-    Index Page <button class="action">create a contact</button>
+    <div class="page-header">Index Page - <a class="action" href="{{ route('contacts.create') }}">create a contact</a></div>
 
     <table class="data-table">
         <tr>
