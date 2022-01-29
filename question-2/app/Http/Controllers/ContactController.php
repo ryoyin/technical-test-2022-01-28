@@ -110,7 +110,15 @@ class ContactController extends Controller
     }
 
     public function searchRecords(Request $request) {
-        $contacts = Contact::paginate(20, ['*'], 'page', $request->page);
-        return $contacts;
+
+        if (trim($request->search) != '') {
+            $contacts = Contact::where('first_name', 'like', '%'.trim($request->search).'%')
+                ->orWhere('last_name', 'like', '%'.trim($request->search).'%')
+                ->paginate(20, ['*'], 'page', $request->page);
+        } else {
+            $contacts = Contact::paginate(20, ['*'], 'page', $request->page);
+        }
+
+        return $contacts->appends('search', trim($request->search));
     }
 }

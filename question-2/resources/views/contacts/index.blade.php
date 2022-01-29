@@ -54,6 +54,8 @@
         </div>
     @endif
 
+    <div>Search by name: <input type="text" id="search" size="20"> <button onclick="search()">Go</button>
+
     <table class="data-table">
         <tr>
             <th>First Name</th>
@@ -75,6 +77,8 @@
     </table>
 
     <script>
+        var searchQuery = '';
+
         // create template for contact data
         var dataTableDataTemplate = '<tr class="contact-data">' +
             '<td>first_name</td>' +
@@ -91,7 +95,17 @@
                     '<li>next_page</li>' +
                 '</ul>' +
             '</td>' +
-        '</tr>'
+        '</tr>';
+
+        function search() {
+            var target = $('#search').val().trim();
+            if (target != '') {
+                searchQuery = 'search=' + target;
+                fetchContact('?' + searchQuery);
+            } else {
+                fetchContact('?page=1');
+            }
+        }
 
         function generatePagination(res) {
             // pagination
@@ -101,17 +115,17 @@
             // determine prev_page html code
             var prev_page = current_page - 1;
             prev_page = prev_page == 0 ? 1 : prev_page;
-            var prev_page = prev_page == current_page ? '<' : '<a href="#" onclick="fetchContact(' + prev_page + ')"><</a>'
+            var prev_page = prev_page == current_page ? '<' : '<a href="#" onclick="fetchContact(\'?page=' + prev_page + '&' + searchQuery + '\')"><</a>'
 
             // determine next_page html code
             var next_page = current_page + 1;
             next_page = next_page > last_page ? last_page : next_page;
-            var next_page = next_page == current_page ? '>' : '<a href="#" onclick="fetchContact(' + next_page + ')">></a>'
+            var next_page = next_page == current_page ? '>' : '<a href="#" onclick="fetchContact(\'?page=' + next_page + '&' + searchQuery + '\')">></a>'
 
             // generate page links
             var page_links = '';
             for(var i=1; i<=last_page; i++) {
-                var link = i == current_page ? i : '<a href="#" onclick="fetchContact(' + i + ')">' + i + '</a>';
+                var link = i == current_page ? i : '<a href="#" onclick="fetchContact(\'?page=' + i + '&' + searchQuery + '\')">' + i + '</a>';
                 page_links += '<li>' + link + '</li>';
             }
 
@@ -125,14 +139,14 @@
         }
 
         // retrieve contact records via api
-        function fetchContact(page) {
+        function fetchContact(query) {
             $("#overlay").show(); // display loading message
 
             $(".contact-data").remove(); // remove table data
             $(".contact-pagination").remove(); // remove table pagination
 
             // get request for contacts data
-            $.ajax( "{{ url('/api/contacts') }}?page=" + page )
+            $.ajax( "{{ url('/api/contacts') }}" + query )
                 .done(function(res) {
 
                     console.log(res);
@@ -147,7 +161,8 @@
                         $('.data-table').append(tmpData);
                     });
 
-                    $('.data-table').append(generatePagination(res)); // append generated pagination code to the table
+                    if (res.last_page > 1)
+                        $('.data-table').append(generatePagination(res)); // append generated pagination code to the table
 
                     // remove overlay
                     $("#overlay")
@@ -160,7 +175,7 @@
         }
 
         $( document ).ready(function() {
-            fetchContact(1);
+            fetchContact('?page=1');
         });
     </script>
 @endsection
