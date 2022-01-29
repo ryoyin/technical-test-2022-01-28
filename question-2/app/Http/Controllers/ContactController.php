@@ -108,4 +108,9 @@ class ContactController extends Controller
     {
         //
     }
+
+    public function searchRecords(Request $request) {
+        $contacts = Contact::paginate(20, ['*'], 'page', $request->page);
+        return $contacts;
+    }
 }
