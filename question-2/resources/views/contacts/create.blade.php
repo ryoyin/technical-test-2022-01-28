@@ -14,6 +14,7 @@
     </style>
 
     <div class="page-header">Create a new contact</div>
+
     <form method="POST" action="{{ route('contacts.store') }}">
         <div>
             <div class="label"><label>First Name</label>:</div>
@@ -25,7 +26,7 @@
         </div>
         <div>
             <div class="label"><label>Email</label>:</div>
-            <input type="email" id="last_name" class="form-field" name="last_name" placeholder="e.g. paul.mccartney@gmail.com" required>
+            <input type="email" id="email" class="form-field" name="email" placeholder="e.g. paul.mccartney@gmail.com" required>
         </div>
         <div>
             <div class="label"><label>Telephone</label>:</div>
@@ -35,4 +36,44 @@
             <input type="submit">
         </div>
     </form>
+
+    <script>
+        // validate form submission
+        $('form').submit(function() {
+            var $first_name = $('#first_name').val();
+            var $last_name = $('#last_name').val();
+            var $email = $('#email').val();
+            var $telephone = $('#telephone').val();
+
+            var error_message = "";
+
+            // validate first name
+            if ($first_name.length > 30) {
+                error_message += "Invalid first name.\n";
+            }
+
+            // validate last name
+            if ($last_name.length > 30) {
+                error_message += "Invalid last name.\n";
+            }
+
+            // validate email address
+            if ($email.length > 100) {
+                error_message += "Invalid email address.\n";
+            }
+
+            // validate telephone number
+            if (!$.isNumeric($telephone) || $telephone.length != 11) { // check if it's numeric number and contains 11 digits
+                error_message += "Invalid telephone number.\n";
+            }
+
+            // show error message
+            if (error_message != "") {
+                alert(error_message);
+                return false;
+            }
+
+            return false;
+        });
+    </script>
 @endsection
