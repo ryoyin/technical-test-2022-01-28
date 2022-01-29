@@ -18,6 +18,7 @@ class ContactController extends Controller
         $contacts = Contact::paginate(20);
 
         $data = array(
+            'page_title' => 'Index',
             'contacts' => $contacts
         );
 
@@ -31,7 +32,11 @@ class ContactController extends Controller
      */
     public function create()
     {
-        return view('contacts.create');
+        $data = array(
+            'page_title' => 'Create'
+        );
+
+        return view('contacts.create', $data);
     }
 
     /**
