@@ -19,7 +19,7 @@
         }
 
         .data-table-footer {
-            /* text-align: right; */
+            text-align: right;
         }
 
         nav {
@@ -30,6 +30,7 @@
             margin: 0;
             padding: 0;
             list-style-type: none;
+            display: inline-block;
         }
 
         ul > li {
