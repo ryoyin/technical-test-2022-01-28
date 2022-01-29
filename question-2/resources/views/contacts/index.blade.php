@@ -1,54 +1,45 @@
-<style>
-    .main {
-        max-width: 800px;
-        margin: 0 auto;
-    }
+@extends('layouts.default')
 
-    .header {
-        margin: 10px 0;
-    }
-    .header .title {
-        float: left;
-    }
-    .header .action {
-        float: right;
-    }
+@section('content')
+    <style>
+        .action {
+            margin-bottom: 10px;
+        }
 
-    .data-table {
-        clear: both;
-    }
+        .data-table {
+            clear: both;
+        }
 
-    .data-table-footer {
-        /* text-align: right; */
-    }
+        .data-table th {
+            text-align: left;
+        }
 
-    nav {
-        float: right;
-    }
+        .data-table-footer {
+            /* text-align: right; */
+        }
 
-    ul {
-        margin: 0;
-        padding: 0;
-        list-style-type: none;
-    }
+        nav {
+            float: right;
+        }
 
-    ul > li {
-        float: left;
-        padding: 5px;
-    }
+        ul {
+            margin: 0;
+            padding: 0;
+            list-style-type: none;
+        }
 
-    ul > li > a {
-        text-decoration: none;
-        color: #7494c4;
-    }
-</style>
+        ul > li {
+            float: left;
+            padding: 5px;
+        }
 
-<div class="main">
+        ul > li > a {
+            text-decoration: none;
+            color: #7494c4;
+        }
+    </style>
 
-    <div class="header">
-        <div class="title">Contact Page</div>
-        <button class="action">create</button>
-    </div>
+    Index Page <button class="action">create a contact</button>
 
     <table class="data-table">
         <tr>
@@ -69,5 +60,4 @@
             <td colspan="4" class="data-table-footer">{{ $contacts->links() }}</td>
         </tr>
     </table>
-
-</div>
+@endsection
