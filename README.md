@@ -4,7 +4,7 @@
 
 Location: question-1\laravel-test-1-ans.blade.php
 
-line 15: @extend should be extends
+line 15: @extend should be @extends
 ````
 @extends('layouts.default')
 ````
@@ -12,7 +12,7 @@ line 18: missing double quote "Loading blog posts...>
 ````
 <div id="blog-wrapper" class="blog__wrapper" data-load-msg="Loading blog posts...">
 ````
-line 26&35: should be foreach and exclude paginate
+line 26&35: should use foreach and exclude pagination
 ````
 @foreach($posts as $post)
     <a href="{!! route('blogs.show', $post->id) !!}" class="blogs__post">
@@ -25,11 +25,11 @@ line 26&35: should be foreach and exclude paginate
     </a>
 @endforeach
 ````
-line 45: $posts->append(request()->except('page'))->links() should be appends
+line 45: append should be appends
 ````
 $posts->appends(request()->except('page'))->links()
 ````
-line 50: ['type' = 'blogs'] should be =>
+line 50: ['type' = 'blogs'] missing >
 ````
 ['type' => 'blogs']
 ````
@@ -41,7 +41,7 @@ line 57: translate helper function should be trans
 ````
 trans('buttons.add_type', ['type' => 'Blog'])
 ````
-line 60: @end should be endsection
+line 60: @end should be @endsection
 ````
 @endsection
 ````
@@ -49,6 +49,7 @@ line 60: @end should be endsection
 ## _Question 2_
 ### Project Setup
 The project use laradock to setup the development enviornment.
+
 Location: question_2
 
 Create enviornment file 
