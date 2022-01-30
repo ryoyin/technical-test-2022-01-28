@@ -42,7 +42,7 @@
                     ]) !!}
                 </div>
                 <div class="blogs-meta__pagination">
-                    {{ $posts->links() }}
+                    {{ $posts->appends(request()->except('page'))->links() }}
                 </div>
             </div>
         @else
